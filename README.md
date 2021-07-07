@@ -1,6 +1,7 @@
 # flutter_app
 
-demo
+master分支：主要是常用组件的使用、常用的布局
+dev分支：主要网络请求、数据状态共享、本地缓存
 
 ## Getting Started
 
