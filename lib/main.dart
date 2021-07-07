@@ -1,6 +1,13 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// 底部导航
 import 'router/TabNavigator.dart';
+// 启动页
 import 'pages/starting/index.dart';
+// 登录页
 import 'pages/login/login.dart';
 // 首页
 import 'pages/home/home_detail_page.dart';
@@ -10,14 +17,19 @@ import 'pages/cate/cate_detail_page.dart';
 import 'pages/user/user_detail_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [],
+      child: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
