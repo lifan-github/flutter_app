@@ -46,7 +46,7 @@ class _StartingPageState extends State<StartingPage> {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset("lib/assets/images/logo.png", width: 150.0),
+              Image.asset("images/logo.png", width: 150.0),
               Text(
                 '$_count',
                 style: TextStyle(fontSize: 40.0, color: Colors.blue),

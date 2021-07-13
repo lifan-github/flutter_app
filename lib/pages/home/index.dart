@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -9,360 +10,82 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+
+  List _imageUrls = [
+    "https://img0.baidu.com/it/u=192503985,3356094582&fm=26&fmt=auto&gp=0.jpg",
+    "https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fq_70%2Cc_zoom%2Cw_640%2Fimages%2F20180620%2F34adbbb8b3bf449888f19384e8c293bc.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628760300&t=0ba908eb5e34182457848fa9d5f229b7",
+    "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fstatic-xiaoguotu.17house.com%2Fxgt%2Fm%2F01%2F146272724015.jpg&refer=http%3A%2F%2Fstatic-xiaoguotu.17house.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628760300&t=9872b612c42ce099af4f5ce209f7e675"
+  ];
+
+  double appBarAlpha = 0;
+  _onScroll(offset){
+    double alpha = offset/100; // 100 滚动100时开始渐变
+    if(alpha < 0){
+      alpha = 0;
+    } else if(alpha > 1){
+      alpha = 1;
+    }
+    setState(() {
+      appBarAlpha = alpha;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          actions: <Widget>[
-            IconButton(
-                onPressed: () => {
-                      Navigator.of(context)
-                          .pushNamed("home_detail_page", arguments: "我是父页面参数")
-                    },
-                icon: Icon(Icons.more))
+        body: Stack( // 后面元素在上层，前面元素在下层
+          children: [
+            MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: NotificationListener( // 页面滚动的监听
+                  onNotification: (scrollNotification){
+                    if(scrollNotification is ScrollUpdateNotification && scrollNotification.depth == 0){
+                      // 滚动且是列表滚动的时候
+                      _onScroll(scrollNotification.metrics.pixels);
+                    }
+                    return true;
+                  },
+                  child: ListView(
+                    children: [
+                      Container(
+                        height: 160,
+                        child: Swiper(
+                          itemCount: _imageUrls.length,
+                          autoplay: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Image.network(
+                              _imageUrls[index],
+                              fit: BoxFit.fill,
+                            );
+                          },
+                          pagination: SwiperPagination(),
+                        ),
+                      ),
+                      Container(
+                        height: 800,
+                        child: Text("fafa"),
+                      )
+                    ],
+                  ),
+                )
+            ),
+            Opacity(
+              opacity: appBarAlpha,
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(color: Colors.white),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text("首页"),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Center(
-                child: Text("flex基础单行布局"),
-              ),
-              FlexWidget(),
-              SizedBox(height: 20.0),
-              Center(
-                child: Text("flex多行布局"),
-              ),
-              Padding(padding: EdgeInsets.all(1.0)),
-              FlexWidget2(),
-              SizedBox(height: 20.0),
-              Center(
-                child: Text("flex单行自动换行"),
-              ),
-              WrapWidget(),
-              SizedBox(height: 20.0),
-              Center(
-                child: Text("Algin组件"),
-              ),
-              AlginWidget(),
-              SizedBox(height: 20.0),
-              Center(
-                child: Text("ButtonBar组件"),
-              ),
-              ButtonBarWidget(),
-              SizedBox(height: 20.0),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    final snackBar = SnackBar(
-                      content: Text('SnackBar'),
-                      backgroundColor: Colors.green,
-                      action: SnackBarAction(
-                        textColor: Colors.white,
-                        label: '撤销',
-                        onPressed: () {},
-                      ),
-                      duration: Duration(seconds: 2),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                  child: Text('底部提示SnackBar'),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Center(
-                child: Text("装饰类Decoratedbox组件"),
-              ),
-              DecoratedBoxWidget(),
-              SizedBox(height: 100.0),
-              Center(
-                child: Text("overflow溢出容器"),
-              ),
-              Container(
-                  color: Colors.red,
-                  width: 100.0,
-                  height: 100.0,
-                  padding: EdgeInsets.all(10.0),
-                  child: OverflowBox(
-                    // 溢出容器
-                    alignment: Alignment.bottomRight, // 溢出方向
-                    maxHeight: 200.0,
-                    maxWidth: 200.0,
-                    child: Container(
-                      color: Colors.blue,
-                      width: 300.0,
-                      height: 500.0,
-                    ),
-                  )),
-              TextButton(onPressed: () {}, child: Text('text button')),
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.home),
-                label: Text('TextButton'),
-              ),
-              ElevatedButton(
-                  onPressed: (){},
-                  child: Text('ElevatedButton'),
-              ),
-              Divider(color: Colors.red, height: 1.0),
-              RawMaterialButton(onPressed: (){}, child: Text('RawMaterialButton'),)
-            ],
-          ),
-        ));
-  }
-}
-
-class DecoratedBoxWidget extends StatelessWidget {
-  const DecoratedBoxWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 200.0,
-        height: 200.0,
-        child: DecoratedBox(
-          position: DecorationPosition.background,
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: ExactAssetImage('lib/assets/images/logo.png'),
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-            border: Border.all(
-              color: Colors.red,
-              width: 6.0,
-            ),
-            shape: BoxShape.rectangle,
-          ),
-          child:
-              Text('定位演示', style: TextStyle(fontSize: 20, color: Colors.white)),
-        ),
-      ),
     );
   }
-}
-
-class ButtonBarWidget extends StatelessWidget {
-  const ButtonBarWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ButtonBar(
-      alignment: MainAxisAlignment.spaceBetween, // 对其方式
-      mainAxisSize: MainAxisSize.max, // child 大小
-      children: [
-        ElevatedButton(onPressed: () {}, child: Text('按钮1')),
-        ElevatedButton(onPressed: () {}, child: Text('按钮2')),
-        ElevatedButton(onPressed: () {}, child: Text('按钮3')),
-        ElevatedButton(onPressed: () {}, child: Text('按钮4')),
-      ],
-    );
-  }
-}
-
-class AlginWidget extends StatelessWidget {
-  const AlginWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      child: Align(
-        alignment: Alignment.center,
-        widthFactor: 2.0,
-        heightFactor: 2.0,
-        child: Container(
-          color: Colors.green,
-          width: 100.0,
-          height: 50.0,
-          child: Text(
-            'algin',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class FlexWidget extends StatelessWidget {
-  const FlexWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Flex(
-      direction: Axis.horizontal,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: Colors.blue,
-            padding: EdgeInsets.all(10.0),
-            child: Center(
-              child: Text("Flex布局1"),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 1,
-          child: Container(
-            color: Colors.green,
-            padding: EdgeInsets.all(10.0),
-            child: Center(
-              child: Text("Flex布局2"),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class FlexWidget2 extends StatelessWidget {
-  const FlexWidget2({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Flex(direction: Axis.horizontal, children: [
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.green,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.blue,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.green,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.blue,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              ))
-        ]),
-        Flex(direction: Axis.horizontal, children: [
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.green,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.blue,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.green,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              )),
-          Expanded(
-              flex: 1,
-              child: Container(
-                color: Colors.blue,
-                padding: EdgeInsets.all(10.0),
-                child: Center(
-                  child: Column(
-                    children: [Text("文字"), Text("icon")],
-                  ),
-                ),
-              ))
-        ]),
-      ],
-    );
-  }
-}
-
-// flex wrap box
-class WrapWidget extends StatelessWidget {
-  const WrapWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 1,
-      runSpacing: 5,
-      children: flexWraps(),
-    );
-  }
-
-  // 循环列表
-  List<Widget> flexWraps() => List.generate(
-      23,
-      (index) => Container(
-            width: 50,
-            height: 50,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: [Colors.orangeAccent, Colors.orange, Colors.deepOrange],
-            )),
-            child: Text(
-              '$index',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-          ));
 }
