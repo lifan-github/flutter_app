@@ -26,6 +26,7 @@ class _TabNavigatorState extends State<TabNavigator> {
           MyCatePage(title: "资产"),
           MyUserPage(title: "我的"),
         ],
+        physics: NeverScrollableScrollPhysics(), // 可左右滑动，不设置为可滑动
         onPageChanged: (index){
           _controller.jumpToPage(index);
           setState(() {
