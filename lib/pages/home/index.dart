@@ -5,6 +5,7 @@ import 'package:flutter_app/model/common_model.dart';
 import 'package:flutter_app/model/home_model.dart';
 import 'package:flutter_app/widget/grid_nav.dart';
 import 'package:flutter_app/widget/local_nav.dart';
+import 'package:flutter_app/widget/sub_nav.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -88,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ListView(
                   children: [
                     Container(
-                      height: 180,
+                      height: 240,
                       child: Swiper(
                         itemCount: _imageUrls.length,
                         autoplay: true,
@@ -108,6 +109,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
                       child: GridNavBox(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                      child: SubNav(),
                     ),
                     Text(resultString),
                   ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/model/grid_nav_model.dart';
 
 var gridNavList = {
   'hotel': {
@@ -94,6 +95,9 @@ var gridNavList = {
 };
 
 class GridNavBox extends StatelessWidget {
+  // 引入数据modal
+  // final GridNavModel gridNavModel;
+
   const GridNavBox({Key? key}) : super(key: key);
 
   @override
