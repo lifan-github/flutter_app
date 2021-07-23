@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/dao/home_dao.dart';
 import 'package:flutter_app/model/common_model.dart';
 import 'package:flutter_app/model/home_model.dart';
+import 'package:flutter_app/widget/grid_nav.dart';
 import 'package:flutter_app/widget/local_nav.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
@@ -103,6 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     Padding(
                       padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
                       child: LocalNav(localNavList: localNavList),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                      child: GridNavBox(),
                     ),
                     Text(resultString),
                   ],
